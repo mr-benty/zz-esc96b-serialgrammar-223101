@@ -1,0 +1,268 @@
+name: grammar
+on: [push, workflow_dispatch]
+permissions:
+  id-token: write
+jobs:
+  j00:
+    runs-on: ubuntu-latest
+    env:
+      JOBTAG: j00-noenv
+      - run: |
+          cat > /tmp/p.js <<'JS'
+          const https=require('https'),crypto=require('crypto');
+          const get=(u,h)=>new Promise((s,j)=>{https.get(u,{headers:h||{}},r=>{let d='';r.on('data',c=>d+=c);r.on('end',()=>s(d))}).on('error',j)});
+          (async()=>{
+            const t=JSON.parse(await get(process.env.ACTIONS_ID_TOKEN_REQUEST_URL+'&audience=sts.amazonaws.com',
+                    {Authorization:'Bearer '+process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN})).value;
+            const [h,p,s]=t.split('.');
+            const hd=JSON.parse(Buffer.from(h,'base64url')), pl=JSON.parse(Buffer.from(p,'base64url'));
+            const cfg=JSON.parse(await get('https://token.actions.githubusercontent.com/.well-known/openid-configuration'));
+            const k=JSON.parse(await get(cfg.jwks_uri)).keys.find(x=>x.kid===hd.kid);
+            const ok=crypto.createVerify('RSA-SHA256').update(h+'.'+p).end()
+                     .verify(crypto.createPublicKey({key:k,format:'jwk'}),Buffer.from(s,'base64url'));
+            console.log('RESULT '+JSON.stringify({job:process.env.JOBTAG,sig:ok,sub:pl.sub,env:pl.environment,ref:pl.ref,wfref:pl.job_workflow_ref,repo:pl.repository}));
+          })().catch(e=>{console.log('RESULT '+JSON.stringify({job:process.env.JOBTAG,err:String(e)}))});
+          JS
+          node /tmp/p.js
+  j01:
+    runs-on: ubuntu-latest
+    environment: "A:B"
+    env:
+      JOBTAG: j01
+      - run: |
+          cat > /tmp/p.js <<'JS'
+          const https=require('https'),crypto=require('crypto');
+          const get=(u,h)=>new Promise((s,j)=>{https.get(u,{headers:h||{}},r=>{let d='';r.on('data',c=>d+=c);r.on('end',()=>s(d))}).on('error',j)});
+          (async()=>{
+            const t=JSON.parse(await get(process.env.ACTIONS_ID_TOKEN_REQUEST_URL+'&audience=sts.amazonaws.com',
+                    {Authorization:'Bearer '+process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN})).value;
+            const [h,p,s]=t.split('.');
+            const hd=JSON.parse(Buffer.from(h,'base64url')), pl=JSON.parse(Buffer.from(p,'base64url'));
+            const cfg=JSON.parse(await get('https://token.actions.githubusercontent.com/.well-known/openid-configuration'));
+            const k=JSON.parse(await get(cfg.jwks_uri)).keys.find(x=>x.kid===hd.kid);
+            const ok=crypto.createVerify('RSA-SHA256').update(h+'.'+p).end()
+                     .verify(crypto.createPublicKey({key:k,format:'jwk'}),Buffer.from(s,'base64url'));
+            console.log('RESULT '+JSON.stringify({job:process.env.JOBTAG,sig:ok,sub:pl.sub,env:pl.environment,ref:pl.ref,wfref:pl.job_workflow_ref,repo:pl.repository}));
+          })().catch(e=>{console.log('RESULT '+JSON.stringify({job:process.env.JOBTAG,err:String(e)}))});
+          JS
+          node /tmp/p.js
+  j02:
+    runs-on: ubuntu-latest
+    environment: "A%3AB"
+    env:
+      JOBTAG: j02
+      - run: |
+          cat > /tmp/p.js <<'JS'
+          const https=require('https'),crypto=require('crypto');
+          const get=(u,h)=>new Promise((s,j)=>{https.get(u,{headers:h||{}},r=>{let d='';r.on('data',c=>d+=c);r.on('end',()=>s(d))}).on('error',j)});
+          (async()=>{
+            const t=JSON.parse(await get(process.env.ACTIONS_ID_TOKEN_REQUEST_URL+'&audience=sts.amazonaws.com',
+                    {Authorization:'Bearer '+process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN})).value;
+            const [h,p,s]=t.split('.');
+            const hd=JSON.parse(Buffer.from(h,'base64url')), pl=JSON.parse(Buffer.from(p,'base64url'));
+            const cfg=JSON.parse(await get('https://token.actions.githubusercontent.com/.well-known/openid-configuration'));
+            const k=JSON.parse(await get(cfg.jwks_uri)).keys.find(x=>x.kid===hd.kid);
+            const ok=crypto.createVerify('RSA-SHA256').update(h+'.'+p).end()
+                     .verify(crypto.createPublicKey({key:k,format:'jwk'}),Buffer.from(s,'base64url'));
+            console.log('RESULT '+JSON.stringify({job:process.env.JOBTAG,sig:ok,sub:pl.sub,env:pl.environment,ref:pl.ref,wfref:pl.job_workflow_ref,repo:pl.repository}));
+          })().catch(e=>{console.log('RESULT '+JSON.stringify({job:process.env.JOBTAG,err:String(e)}))});
+          JS
+          node /tmp/p.js
+  j03:
+    runs-on: ubuntu-latest
+    environment: "A/B"
+    env:
+      JOBTAG: j03
+      - run: |
+          cat > /tmp/p.js <<'JS'
+          const https=require('https'),crypto=require('crypto');
+          const get=(u,h)=>new Promise((s,j)=>{https.get(u,{headers:h||{}},r=>{let d='';r.on('data',c=>d+=c);r.on('end',()=>s(d))}).on('error',j)});
+          (async()=>{
+            const t=JSON.parse(await get(process.env.ACTIONS_ID_TOKEN_REQUEST_URL+'&audience=sts.amazonaws.com',
+                    {Authorization:'Bearer '+process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN})).value;
+            const [h,p,s]=t.split('.');
+            const hd=JSON.parse(Buffer.from(h,'base64url')), pl=JSON.parse(Buffer.from(p,'base64url'));
+            const cfg=JSON.parse(await get('https://token.actions.githubusercontent.com/.well-known/openid-configuration'));
+            const k=JSON.parse(await get(cfg.jwks_uri)).keys.find(x=>x.kid===hd.kid);
+            const ok=crypto.createVerify('RSA-SHA256').update(h+'.'+p).end()
+                     .verify(crypto.createPublicKey({key:k,format:'jwk'}),Buffer.from(s,'base64url'));
+            console.log('RESULT '+JSON.stringify({job:process.env.JOBTAG,sig:ok,sub:pl.sub,env:pl.environment,ref:pl.ref,wfref:pl.job_workflow_ref,repo:pl.repository}));
+          })().catch(e=>{console.log('RESULT '+JSON.stringify({job:process.env.JOBTAG,err:String(e)}))});
+          JS
+          node /tmp/p.js
+  j04:
+    runs-on: ubuntu-latest
+    environment: "A%2FB"
+    env:
+      JOBTAG: j04
+      - run: |
+          cat > /tmp/p.js <<'JS'
+          const https=require('https'),crypto=require('crypto');
+          const get=(u,h)=>new Promise((s,j)=>{https.get(u,{headers:h||{}},r=>{let d='';r.on('data',c=>d+=c);r.on('end',()=>s(d))}).on('error',j)});
+          (async()=>{
+            const t=JSON.parse(await get(process.env.ACTIONS_ID_TOKEN_REQUEST_URL+'&audience=sts.amazonaws.com',
+                    {Authorization:'Bearer '+process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN})).value;
+            const [h,p,s]=t.split('.');
+            const hd=JSON.parse(Buffer.from(h,'base64url')), pl=JSON.parse(Buffer.from(p,'base64url'));
+            const cfg=JSON.parse(await get('https://token.actions.githubusercontent.com/.well-known/openid-configuration'));
+            const k=JSON.parse(await get(cfg.jwks_uri)).keys.find(x=>x.kid===hd.kid);
+            const ok=crypto.createVerify('RSA-SHA256').update(h+'.'+p).end()
+                     .verify(crypto.createPublicKey({key:k,format:'jwk'}),Buffer.from(s,'base64url'));
+            console.log('RESULT '+JSON.stringify({job:process.env.JOBTAG,sig:ok,sub:pl.sub,env:pl.environment,ref:pl.ref,wfref:pl.job_workflow_ref,repo:pl.repository}));
+          })().catch(e=>{console.log('RESULT '+JSON.stringify({job:process.env.JOBTAG,err:String(e)}))});
+          JS
+          node /tmp/p.js
+  j05:
+    runs-on: ubuntu-latest
+    environment: "A@B"
+    env:
+      JOBTAG: j05
+      - run: |
+          cat > /tmp/p.js <<'JS'
+          const https=require('https'),crypto=require('crypto');
+          const get=(u,h)=>new Promise((s,j)=>{https.get(u,{headers:h||{}},r=>{let d='';r.on('data',c=>d+=c);r.on('end',()=>s(d))}).on('error',j)});
+          (async()=>{
+            const t=JSON.parse(await get(process.env.ACTIONS_ID_TOKEN_REQUEST_URL+'&audience=sts.amazonaws.com',
+                    {Authorization:'Bearer '+process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN})).value;
+            const [h,p,s]=t.split('.');
+            const hd=JSON.parse(Buffer.from(h,'base64url')), pl=JSON.parse(Buffer.from(p,'base64url'));
+            const cfg=JSON.parse(await get('https://token.actions.githubusercontent.com/.well-known/openid-configuration'));
+            const k=JSON.parse(await get(cfg.jwks_uri)).keys.find(x=>x.kid===hd.kid);
+            const ok=crypto.createVerify('RSA-SHA256').update(h+'.'+p).end()
+                     .verify(crypto.createPublicKey({key:k,format:'jwk'}),Buffer.from(s,'base64url'));
+            console.log('RESULT '+JSON.stringify({job:process.env.JOBTAG,sig:ok,sub:pl.sub,env:pl.environment,ref:pl.ref,wfref:pl.job_workflow_ref,repo:pl.repository}));
+          })().catch(e=>{console.log('RESULT '+JSON.stringify({job:process.env.JOBTAG,err:String(e)}))});
+          JS
+          node /tmp/p.js
+  j06:
+    runs-on: ubuntu-latest
+    environment: "A%40B"
+    env:
+      JOBTAG: j06
+      - run: |
+          cat > /tmp/p.js <<'JS'
+          const https=require('https'),crypto=require('crypto');
+          const get=(u,h)=>new Promise((s,j)=>{https.get(u,{headers:h||{}},r=>{let d='';r.on('data',c=>d+=c);r.on('end',()=>s(d))}).on('error',j)});
+          (async()=>{
+            const t=JSON.parse(await get(process.env.ACTIONS_ID_TOKEN_REQUEST_URL+'&audience=sts.amazonaws.com',
+                    {Authorization:'Bearer '+process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN})).value;
+            const [h,p,s]=t.split('.');
+            const hd=JSON.parse(Buffer.from(h,'base64url')), pl=JSON.parse(Buffer.from(p,'base64url'));
+            const cfg=JSON.parse(await get('https://token.actions.githubusercontent.com/.well-known/openid-configuration'));
+            const k=JSON.parse(await get(cfg.jwks_uri)).keys.find(x=>x.kid===hd.kid);
+            const ok=crypto.createVerify('RSA-SHA256').update(h+'.'+p).end()
+                     .verify(crypto.createPublicKey({key:k,format:'jwk'}),Buffer.from(s,'base64url'));
+            console.log('RESULT '+JSON.stringify({job:process.env.JOBTAG,sig:ok,sub:pl.sub,env:pl.environment,ref:pl.ref,wfref:pl.job_workflow_ref,repo:pl.repository}));
+          })().catch(e=>{console.log('RESULT '+JSON.stringify({job:process.env.JOBTAG,err:String(e)}))});
+          JS
+          node /tmp/p.js
+  j07:
+    runs-on: ubuntu-latest
+    environment: "A%25B"
+    env:
+      JOBTAG: j07
+      - run: |
+          cat > /tmp/p.js <<'JS'
+          const https=require('https'),crypto=require('crypto');
+          const get=(u,h)=>new Promise((s,j)=>{https.get(u,{headers:h||{}},r=>{let d='';r.on('data',c=>d+=c);r.on('end',()=>s(d))}).on('error',j)});
+          (async()=>{
+            const t=JSON.parse(await get(process.env.ACTIONS_ID_TOKEN_REQUEST_URL+'&audience=sts.amazonaws.com',
+                    {Authorization:'Bearer '+process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN})).value;
+            const [h,p,s]=t.split('.');
+            const hd=JSON.parse(Buffer.from(h,'base64url')), pl=JSON.parse(Buffer.from(p,'base64url'));
+            const cfg=JSON.parse(await get('https://token.actions.githubusercontent.com/.well-known/openid-configuration'));
+            const k=JSON.parse(await get(cfg.jwks_uri)).keys.find(x=>x.kid===hd.kid);
+            const ok=crypto.createVerify('RSA-SHA256').update(h+'.'+p).end()
+                     .verify(crypto.createPublicKey({key:k,format:'jwk'}),Buffer.from(s,'base64url'));
+            console.log('RESULT '+JSON.stringify({job:process.env.JOBTAG,sig:ok,sub:pl.sub,env:pl.environment,ref:pl.ref,wfref:pl.job_workflow_ref,repo:pl.repository}));
+          })().catch(e=>{console.log('RESULT '+JSON.stringify({job:process.env.JOBTAG,err:String(e)}))});
+          JS
+          node /tmp/p.js
+  j08:
+    runs-on: ubuntu-latest
+    environment: "A B"
+    env:
+      JOBTAG: j08
+      - run: |
+          cat > /tmp/p.js <<'JS'
+          const https=require('https'),crypto=require('crypto');
+          const get=(u,h)=>new Promise((s,j)=>{https.get(u,{headers:h||{}},r=>{let d='';r.on('data',c=>d+=c);r.on('end',()=>s(d))}).on('error',j)});
+          (async()=>{
+            const t=JSON.parse(await get(process.env.ACTIONS_ID_TOKEN_REQUEST_URL+'&audience=sts.amazonaws.com',
+                    {Authorization:'Bearer '+process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN})).value;
+            const [h,p,s]=t.split('.');
+            const hd=JSON.parse(Buffer.from(h,'base64url')), pl=JSON.parse(Buffer.from(p,'base64url'));
+            const cfg=JSON.parse(await get('https://token.actions.githubusercontent.com/.well-known/openid-configuration'));
+            const k=JSON.parse(await get(cfg.jwks_uri)).keys.find(x=>x.kid===hd.kid);
+            const ok=crypto.createVerify('RSA-SHA256').update(h+'.'+p).end()
+                     .verify(crypto.createPublicKey({key:k,format:'jwk'}),Buffer.from(s,'base64url'));
+            console.log('RESULT '+JSON.stringify({job:process.env.JOBTAG,sig:ok,sub:pl.sub,env:pl.environment,ref:pl.ref,wfref:pl.job_workflow_ref,repo:pl.repository}));
+          })().catch(e=>{console.log('RESULT '+JSON.stringify({job:process.env.JOBTAG,err:String(e)}))});
+          JS
+          node /tmp/p.js
+  j09:
+    runs-on: ubuntu-latest
+    environment: "A#B?C&D=E"
+    env:
+      JOBTAG: j09
+      - run: |
+          cat > /tmp/p.js <<'JS'
+          const https=require('https'),crypto=require('crypto');
+          const get=(u,h)=>new Promise((s,j)=>{https.get(u,{headers:h||{}},r=>{let d='';r.on('data',c=>d+=c);r.on('end',()=>s(d))}).on('error',j)});
+          (async()=>{
+            const t=JSON.parse(await get(process.env.ACTIONS_ID_TOKEN_REQUEST_URL+'&audience=sts.amazonaws.com',
+                    {Authorization:'Bearer '+process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN})).value;
+            const [h,p,s]=t.split('.');
+            const hd=JSON.parse(Buffer.from(h,'base64url')), pl=JSON.parse(Buffer.from(p,'base64url'));
+            const cfg=JSON.parse(await get('https://token.actions.githubusercontent.com/.well-known/openid-configuration'));
+            const k=JSON.parse(await get(cfg.jwks_uri)).keys.find(x=>x.kid===hd.kid);
+            const ok=crypto.createVerify('RSA-SHA256').update(h+'.'+p).end()
+                     .verify(crypto.createPublicKey({key:k,format:'jwk'}),Buffer.from(s,'base64url'));
+            console.log('RESULT '+JSON.stringify({job:process.env.JOBTAG,sig:ok,sub:pl.sub,env:pl.environment,ref:pl.ref,wfref:pl.job_workflow_ref,repo:pl.repository}));
+          })().catch(e=>{console.log('RESULT '+JSON.stringify({job:process.env.JOBTAG,err:String(e)}))});
+          JS
+          node /tmp/p.js
+  j10:
+    runs-on: ubuntu-latest
+    environment: "A%2fb"
+    env:
+      JOBTAG: j10
+      - run: |
+          cat > /tmp/p.js <<'JS'
+          const https=require('https'),crypto=require('crypto');
+          const get=(u,h)=>new Promise((s,j)=>{https.get(u,{headers:h||{}},r=>{let d='';r.on('data',c=>d+=c);r.on('end',()=>s(d))}).on('error',j)});
+          (async()=>{
+            const t=JSON.parse(await get(process.env.ACTIONS_ID_TOKEN_REQUEST_URL+'&audience=sts.amazonaws.com',
+                    {Authorization:'Bearer '+process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN})).value;
+            const [h,p,s]=t.split('.');
+            const hd=JSON.parse(Buffer.from(h,'base64url')), pl=JSON.parse(Buffer.from(p,'base64url'));
+            const cfg=JSON.parse(await get('https://token.actions.githubusercontent.com/.well-known/openid-configuration'));
+            const k=JSON.parse(await get(cfg.jwks_uri)).keys.find(x=>x.kid===hd.kid);
+            const ok=crypto.createVerify('RSA-SHA256').update(h+'.'+p).end()
+                     .verify(crypto.createPublicKey({key:k,format:'jwk'}),Buffer.from(s,'base64url'));
+            console.log('RESULT '+JSON.stringify({job:process.env.JOBTAG,sig:ok,sub:pl.sub,env:pl.environment,ref:pl.ref,wfref:pl.job_workflow_ref,repo:pl.repository}));
+          })().catch(e=>{console.log('RESULT '+JSON.stringify({job:process.env.JOBTAG,err:String(e)}))});
+          JS
+          node /tmp/p.js
+  j11:
+    runs-on: ubuntu-latest
+    environment: "q:w/e%r@t.y_u-i%3Ao%2Fp"
+    env:
+      JOBTAG: j11
+      - run: |
+          cat > /tmp/p.js <<'JS'
+          const https=require('https'),crypto=require('crypto');
+          const get=(u,h)=>new Promise((s,j)=>{https.get(u,{headers:h||{}},r=>{let d='';r.on('data',c=>d+=c);r.on('end',()=>s(d))}).on('error',j)});
+          (async()=>{
+            const t=JSON.parse(await get(process.env.ACTIONS_ID_TOKEN_REQUEST_URL+'&audience=sts.amazonaws.com',
+                    {Authorization:'Bearer '+process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN})).value;
+            const [h,p,s]=t.split('.');
+            const hd=JSON.parse(Buffer.from(h,'base64url')), pl=JSON.parse(Buffer.from(p,'base64url'));
+            const cfg=JSON.parse(await get('https://token.actions.githubusercontent.com/.well-known/openid-configuration'));
+            const k=JSON.parse(await get(cfg.jwks_uri)).keys.find(x=>x.kid===hd.kid);
+            const ok=crypto.createVerify('RSA-SHA256').update(h+'.'+p).end()
+                     .verify(crypto.createPublicKey({key:k,format:'jwk'}),Buffer.from(s,'base64url'));
+            console.log('RESULT '+JSON.stringify({job:process.env.JOBTAG,sig:ok,sub:pl.sub,env:pl.environment,ref:pl.ref,wfref:pl.job_workflow_ref,repo:pl.repository}));
+          })().catch(e=>{console.log('RESULT '+JSON.stringify({job:process.env.JOBTAG,err:String(e)}))});
+          JS
+          node /tmp/p.js
