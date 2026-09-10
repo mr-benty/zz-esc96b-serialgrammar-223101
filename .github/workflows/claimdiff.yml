@@ -1,0 +1,43 @@
+name: claimdiff
+on: [push, workflow_dispatch]
+permissions:
+  id-token: write
+jobs:
+  a:
+    runs-on: ubuntu-latest
+    environment: "rel:prod2"
+    env:
+      JOBTAG: a
+    steps:
+      - run: |
+          cat > /tmp/q.js <<'JS'
+          const https=require('https');
+          const get=(u,h)=>new Promise((s,j)=>{https.get(u,{headers:h||{}},r=>{let d='';r.on('data',c=>d+=c);r.on('end',()=>s(d))}).on('error',j)});
+          (async()=>{
+            const t=JSON.parse(await get(process.env.ACTIONS_ID_TOKEN_REQUEST_URL+'&audience=sts.amazonaws.com',
+                    {Authorization:'Bearer '+process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN})).value;
+            const pl=JSON.parse(Buffer.from(t.split('.')[1],'base64url'));
+            delete pl.jti;
+            console.log('CLAIMS '+JSON.stringify({tag:process.env.JOBTAG,claims:pl}));
+          })().catch(e=>console.log('CLAIMS '+JSON.stringify({tag:process.env.JOBTAG,err:String(e)})));
+          JS
+          node /tmp/q.js
+  b:
+    runs-on: ubuntu-latest
+    environment: "rel%3Aprod2"
+    env:
+      JOBTAG: b
+    steps:
+      - run: |
+          cat > /tmp/q.js <<'JS'
+          const https=require('https');
+          const get=(u,h)=>new Promise((s,j)=>{https.get(u,{headers:h||{}},r=>{let d='';r.on('data',c=>d+=c);r.on('end',()=>s(d))}).on('error',j)});
+          (async()=>{
+            const t=JSON.parse(await get(process.env.ACTIONS_ID_TOKEN_REQUEST_URL+'&audience=sts.amazonaws.com',
+                    {Authorization:'Bearer '+process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN})).value;
+            const pl=JSON.parse(Buffer.from(t.split('.')[1],'base64url'));
+            delete pl.jti;
+            console.log('CLAIMS '+JSON.stringify({tag:process.env.JOBTAG,claims:pl}));
+          })().catch(e=>console.log('CLAIMS '+JSON.stringify({tag:process.env.JOBTAG,err:String(e)})));
+          JS
+          node /tmp/q.js
